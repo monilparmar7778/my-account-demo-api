@@ -1,8 +1,9 @@
 ﻿FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
-COPY ["my-account-api.csproj", "."]
-RUN dotnet restore "my-account-api.csproj"
+COPY ["my-account-api/my-account-api.csproj", "my-account-api/"]
+RUN dotnet restore "my-account-api/my-account-api.csproj"
 COPY . .
+WORKDIR "/src/my-account-api"
 RUN dotnet build "my-account-api.csproj" -c Release -o /app/build
 
 FROM build AS publish
