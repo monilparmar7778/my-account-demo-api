@@ -1,0 +1,32 @@
+{
+  "profiles": {
+    "https": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DOTNET_ENVIRONMENT": "Development",
+        "DOTNET_DASHBOARD_OTLP_ENDPOINT_URL": "https://localhost:21207",
+        "DOTNET_RESOURCE_SERVICE_ENDPOINT_URL": "https://localhost:22084"
+      },
+      "dotnetRunMessages": true,
+      "applicationUrl": "https://localhost:17262;http://localhost:15082"
+    },
+    "http": {
+      "commandName": "Project",
+      "workingDirectory": "C:\\Users\\LENOVO\\Downloads",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DOTNET_ENVIRONMENT": "Development",
+        "DOTNET_DASHBOARD_OTLP_ENDPOINT_URL": "http://localhost:19074",
+        "DOTNET_RESOURCE_SERVICE_ENDPOINT_URL": "http://localhost:20170"
+      },
+      "dotnetRunMessages": true,
+      "applicationUrl": "http://localhost:15082",
+      "sqlDebugging": true,
+      "remoteDebugEnabled": true
+    }
+  },
+  "$schema": "https://json.schemastore.org/launchsettings.json"
+}

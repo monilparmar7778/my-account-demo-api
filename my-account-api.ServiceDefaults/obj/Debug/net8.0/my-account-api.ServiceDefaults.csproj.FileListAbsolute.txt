@@ -1,0 +1,12 @@
+C:\Users\LENOVO\my-account-api\my-account-api.ServiceDefaults\bin\Debug\net8.0\my-account-api.ServiceDefaults.deps.json
+C:\Users\LENOVO\my-account-api\my-account-api.ServiceDefaults\bin\Debug\net8.0\my-account-api.ServiceDefaults.dll
+C:\Users\LENOVO\my-account-api\my-account-api.ServiceDefaults\bin\Debug\net8.0\my-account-api.ServiceDefaults.pdb
+C:\Users\LENOVO\my-account-api\my-account-api.ServiceDefaults\obj\Debug\net8.0\my-account-api.ServiceDefaults.csproj.AssemblyReference.cache
+C:\Users\LENOVO\my-account-api\my-account-api.ServiceDefaults\obj\Debug\net8.0\my-account-api.ServiceDefaults.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\LENOVO\my-account-api\my-account-api.ServiceDefaults\obj\Debug\net8.0\my-account-api.ServiceDefaults.AssemblyInfoInputs.cache
+C:\Users\LENOVO\my-account-api\my-account-api.ServiceDefaults\obj\Debug\net8.0\my-account-api.ServiceDefaults.AssemblyInfo.cs
+C:\Users\LENOVO\my-account-api\my-account-api.ServiceDefaults\obj\Debug\net8.0\my-account-api.ServiceDefaults.csproj.CoreCompileInputs.cache
+C:\Users\LENOVO\my-account-api\my-account-api.ServiceDefaults\obj\Debug\net8.0\my-account-api.ServiceDefaults.dll
+C:\Users\LENOVO\my-account-api\my-account-api.ServiceDefaults\obj\Debug\net8.0\refint\my-account-api.ServiceDefaults.dll
+C:\Users\LENOVO\my-account-api\my-account-api.ServiceDefaults\obj\Debug\net8.0\my-account-api.ServiceDefaults.pdb
+C:\Users\LENOVO\my-account-api\my-account-api.ServiceDefaults\obj\Debug\net8.0\ref\my-account-api.ServiceDefaults.dll
