@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+﻿	using System.Text.Json;
 using Npgsql;
 using NpgsqlTypes;
 using my_account_api.models;
@@ -65,7 +65,7 @@ namespace my_account_api.Services
 				Console.WriteLine("Database connection opened successfully");
 
 				using var command = new NpgsqlCommand(
-					"SELECT account_operation('LIST', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)",
+					"SELECT account_operation('LIST', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)",
 					connection
 				);
 
@@ -165,7 +165,7 @@ namespace my_account_api.Services
 					await connection.OpenAsync();
 
 					using var command = new NpgsqlCommand(
-						"SELECT account_operation('LIST', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, @StartDate, @EndDate)",
+						"SELECT account_operation('LIST', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, @StartDate, @EndDate, NULL, NULL)",
 						connection
 					);
 
@@ -290,10 +290,12 @@ namespace my_account_api.Services
 			{
 				Console.WriteLine($"\n=== Executing operation: {operation} ===");
 				Console.WriteLine($"Account ID: {account.acid}");
-				Console.WriteLine($"Name: {account.name}");
+				Console.WriteLine($"Name (User ID): {account.name}");
 				Console.WriteLine($"Get Money: {account.getmoney}");
 				Console.WriteLine($"Interest: {account.intrest}");
 				Console.WriteLine($"Give Money: {account.givemoney}");
+				Console.WriteLine($"Charter Description: {account.charterDescription}");
+				Console.WriteLine($"Give Charter Description: {account.giveCharterDescription}");
 				Console.WriteLine($"Start Date: {account.start_date}");
 				Console.WriteLine($"End Date: {account.end_date}");
 
@@ -301,8 +303,9 @@ namespace my_account_api.Services
 				await connection.OpenAsync();
 				Console.WriteLine("Database connection opened successfully");
 
+				// UPDATED SQL COMMAND: Added two new parameters for charter descriptions
 				using var command = new NpgsqlCommand(
-					"SELECT account_operation(@Operation, @Acid, @Name, @GetMoney, @Intrest, @GiveMoney, @Date, @Agent, @Remark, @GiveName, @GiveRemark, @UtiNo, @GiveUtiNo, @GiveDate, @GiveAgent, @StartDate, @EndDate)",
+					"SELECT account_operation(@Operation, @Acid, @Name, @GetMoney, @Intrest, @GiveMoney, @Date, @Agent, @Remark, @GiveName, @GiveRemark, @UtiNo, @GiveUtiNo, @GiveDate, @GiveAgent, @StartDate, @EndDate, @CharterDescription, @GiveCharterDescription)",
 					connection
 				);
 
@@ -324,6 +327,10 @@ namespace my_account_api.Services
 				command.Parameters.AddWithValue("@GiveAgent", NpgsqlDbType.Varchar, (object)account.giveagent ?? DBNull.Value);
 				command.Parameters.AddWithValue("@StartDate", NpgsqlDbType.Date, (object)account.start_date ?? DBNull.Value);
 				command.Parameters.AddWithValue("@EndDate", NpgsqlDbType.Date, (object)account.end_date ?? DBNull.Value);
+
+				// ADD THESE TWO NEW PARAMETERS for charter descriptions
+				command.Parameters.AddWithValue("@CharterDescription", NpgsqlDbType.Varchar, (object)account.charterDescription ?? DBNull.Value);
+				command.Parameters.AddWithValue("@GiveCharterDescription", NpgsqlDbType.Varchar, (object)account.giveCharterDescription ?? DBNull.Value);
 
 				Console.WriteLine("Executing database command...");
 				var result = await command.ExecuteScalarAsync();
@@ -505,6 +512,14 @@ namespace my_account_api.Services
 				if (dataElement.TryGetProperty("givemoney", out var giveMoneyElement) && giveMoneyElement.ValueKind != JsonValueKind.Null)
 					account.givemoney = giveMoneyElement.GetDecimal();
 
+				// ADD THESE: Parse charter description fields
+				if (dataElement.TryGetProperty("charterdescription", out var charterDescElement) && charterDescElement.ValueKind != JsonValueKind.Null)
+					account.charterDescription = charterDescElement.GetString();
+
+				if (dataElement.TryGetProperty("givecharterdescription", out var giveCharterDescElement) && giveCharterDescElement.ValueKind != JsonValueKind.Null)
+					account.giveCharterDescription = giveCharterDescElement.GetString();
+
+				// Other existing fields...
 				if (dataElement.TryGetProperty("date", out var dateElement) && dateElement.ValueKind != JsonValueKind.Null)
 					account.date = dateElement.GetDateTime();
 
@@ -532,11 +547,10 @@ namespace my_account_api.Services
 				if (dataElement.TryGetProperty("giveagent", out var giveAgentElement) && giveAgentElement.ValueKind != JsonValueKind.Null)
 					account.giveagent = giveAgentElement.GetString();
 
-				// ADD THIS: Parse ismoney field
 				if (dataElement.TryGetProperty("ismoney", out var ismoneyElement) && ismoneyElement.ValueKind != JsonValueKind.Null)
 					account.ismoney = ismoneyElement.GetBoolean();
 
-				Console.WriteLine($"Successfully parsed account: {account.acid} - {account.name} - IsMoney: {account.ismoney}");
+				Console.WriteLine($"Successfully parsed account: {account.acid} - User ID: {account.name} - Charter: {account.charterDescription} - Give Charter: {account.giveCharterDescription}");
 			}
 			catch (Exception ex)
 			{

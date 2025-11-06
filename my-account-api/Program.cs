@@ -23,7 +23,8 @@ public class Program
 		builder.Services.AddScoped<IAccountService, AccountService>();
 		builder.Services.AddScoped<IUserService, UserService>();
 		builder.Services.AddScoped<IAccountRecordService, AccountRecordService>();
-		builder.Services.AddScoped<IAuthService, AuthService>(); // Add Auth Service
+		builder.Services.AddScoped<IAuthService, AuthService>(); 
+		builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 
 		// Configure JWT Settings
 		builder.Services.Configure<AuthModel>(builder.Configuration.GetSection("AuthModel"));					

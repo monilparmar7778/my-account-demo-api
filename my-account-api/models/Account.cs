@@ -1,4 +1,6 @@
-﻿namespace my_account_api.models
+﻿using System.Text.Json.Serialization;
+
+namespace my_account_api.models
 {
 	public class Account
 	{
@@ -26,5 +28,10 @@
 		public DateTime? end_date { get; set; }
 		public bool? ismoney { get; set; }
 
+		[JsonPropertyName("charterdescription")]
+		public string? charterDescription { get; set; } // For get money
+
+		[JsonPropertyName("givecharterdescription")]
+		public string? giveCharterDescription { get; set; } // For give money
 	}
 }

@@ -33,5 +33,23 @@ namespace my_account_api.Controllers
 				});
 			}
 		}
+
+		[HttpGet("basic")]
+		public async Task<ActionResult<UsersResponse>> GetUsersBasicInfo()
+		{
+			try
+			{
+				var result = await _userService.GetUsersBasicInfoAsync();
+				return Ok(result);
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(500, new UsersResponse
+				{
+					success = false,
+					message = $"Internal server error: {ex.Message}"
+				});
+			}
+		}
 	}
 }

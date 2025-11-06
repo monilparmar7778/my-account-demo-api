@@ -17,6 +17,7 @@ namespace my_account_api.Services
 				?? "Host=localhost;Port=5432;Database=my_account_demo;Username=postgres;Password=667866;";
 		}
 
+		// Existing CreateUserAsync method remains the same
 		public async Task<UserResponse> CreateUserAsync(User user)
 		{
 			try
@@ -92,6 +93,52 @@ namespace my_account_api.Services
 				{
 					success = false,
 					message = $"Error creating user: {ex.Message}"
+				};
+			}
+		}
+
+		// NEW METHOD: Get only user_id and username using PostgreSQL function
+		public async Task<UsersResponse> GetUsersBasicInfoAsync()
+		{
+			try
+			{
+				using var connection = new NpgsqlConnection(_connectionString);
+				await connection.OpenAsync();
+
+				// Using the PostgreSQL function get_users_sorted()
+				using var command = new NpgsqlCommand(
+					"SELECT * FROM get_users_sorted()",
+					connection
+				);
+
+				using var reader = await command.ExecuteReaderAsync();
+
+				var users = new List<User>();
+
+				while (await reader.ReadAsync())
+				{
+					var user = new User
+					{
+						user_id = reader.GetInt64(0),
+						username = reader.GetString(1)
+						// Other fields will remain null/default
+					};
+					users.Add(user);
+				}
+
+				return new UsersResponse
+				{
+					success = true,
+					message = users.Count > 0 ? "Users basic info retrieved successfully" : "No users found",
+					data = users
+				};
+			}
+			catch (Exception ex)
+			{
+				return new UsersResponse
+				{
+					success = false,
+					message = $"Error retrieving users basic info: {ex.Message}"
 				};
 			}
 		}
