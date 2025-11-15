@@ -25,7 +25,7 @@ public class Program
 		builder.Services.AddScoped<IAccountRecordService, AccountRecordService>();
 		builder.Services.AddScoped<IAuthService, AuthService>(); 
 		builder.Services.AddScoped<IEmployeeService, EmployeeService>();
-
+		builder.Services.AddScoped<IEmployeeDetailsService, EmployeeDetailsService>();
 		// Configure JWT Settings
 		builder.Services.Configure<AuthModel>(builder.Configuration.GetSection("AuthModel"));					
 
