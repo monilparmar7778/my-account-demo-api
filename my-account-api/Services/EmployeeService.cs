@@ -187,8 +187,8 @@ namespace my_account_api.Services
 			try
 			{
 				Console.WriteLine($"\n=== Executing operation: {operation} ===");
-				Console.WriteLine($"Employee ID: {employee.emp_details_id}");
-				Console.WriteLine($"Name: {employee.employee_name}");
+				Console.WriteLine($"Employee Details ID: {employee.emp_details_id}");
+				Console.WriteLine($"Employee ID: {employee.employee_id}"); // Changed from employee_name
 				Console.WriteLine($"Amount: {employee.employee_amount}");
 				Console.WriteLine($"Description: {employee.employee_descripation}");
 				Console.WriteLine($"Insert Date: {employee.insert_date}");
@@ -198,21 +198,21 @@ namespace my_account_api.Services
 				Console.WriteLine("Database connection opened successfully");
 
 				using var command = new NpgsqlCommand(
-					"SELECT manage_employee(@Operation, @EmpDetailsId, @EmployeeName, @EmployeeAmount, @EmployeeDescription, @InsertDate)",
+					"SELECT manage_employee(@Operation, @EmpDetailsId, @EmployeeId, @EmployeeAmount, @EmployeeDescription, @InsertDate)", // Changed parameter name
 					connection
 				);
 
 				// Add parameters with proper null handling
 				command.Parameters.AddWithValue("@Operation", NpgsqlDbType.Varchar, operation);
 				command.Parameters.AddWithValue("@EmpDetailsId", NpgsqlDbType.Bigint, employee.emp_details_id);
-				command.Parameters.AddWithValue("@EmployeeName", NpgsqlDbType.Varchar, (object)employee.employee_name ?? DBNull.Value);
+				command.Parameters.AddWithValue("@EmployeeId", NpgsqlDbType.Bigint, (object)employee.employee_id ?? DBNull.Value); // Changed to Bigint
 				command.Parameters.AddWithValue("@EmployeeAmount", NpgsqlDbType.Numeric, (object)employee.employee_amount ?? DBNull.Value);
 				command.Parameters.AddWithValue("@EmployeeDescription", NpgsqlDbType.Varchar, (object)employee.employee_descripation ?? DBNull.Value);
 
-				// FIX: Handle date parameter properly
+				// Handle date parameter properly
 				if (employee.insert_date.HasValue)
 				{
-					command.Parameters.AddWithValue("@InsertDate", NpgsqlDbType.Date, employee.insert_date.Value.Date); // Use .Date to get only date part
+					command.Parameters.AddWithValue("@InsertDate", NpgsqlDbType.Date, employee.insert_date.Value.Date);
 				}
 				else
 				{
@@ -384,8 +384,9 @@ namespace my_account_api.Services
 				if (dataElement.TryGetProperty("emp_details_id", out var empIdElement) && empIdElement.ValueKind != JsonValueKind.Null)
 					employee.emp_details_id = empIdElement.GetInt64();
 
-				if (dataElement.TryGetProperty("employee_name", out var nameElement) && nameElement.ValueKind != JsonValueKind.Null)
-					employee.employee_name = nameElement.GetString();
+				// Changed from employee_name to employee_id
+				if (dataElement.TryGetProperty("employee_id", out var idElement) && idElement.ValueKind != JsonValueKind.Null)
+					employee.employee_id = idElement.GetInt64();
 
 				if (dataElement.TryGetProperty("employee_amount", out var amountElement) && amountElement.ValueKind != JsonValueKind.Null)
 					employee.employee_amount = amountElement.GetDecimal();
@@ -393,11 +394,11 @@ namespace my_account_api.Services
 				if (dataElement.TryGetProperty("employee_descripation", out var descElement) && descElement.ValueKind != JsonValueKind.Null)
 					employee.employee_descripation = descElement.GetString();
 
-				// ADDED: Parse insert_date field
+				// Parse insert_date field
 				if (dataElement.TryGetProperty("insert_date", out var insertDateElement) && insertDateElement.ValueKind != JsonValueKind.Null)
 					employee.insert_date = insertDateElement.GetDateTime();
 
-				Console.WriteLine($"Successfully parsed employee: {employee.emp_details_id} - {employee.employee_name} - {employee.employee_amount} - {employee.insert_date}");
+				Console.WriteLine($"Successfully parsed employee: {employee.emp_details_id} - {employee.employee_id} - {employee.employee_amount} - {employee.insert_date}");
 			}
 			catch (Exception ex)
 			{
