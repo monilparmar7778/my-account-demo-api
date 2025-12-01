@@ -5,7 +5,7 @@
 
 		public long employee_id { get; set; }
 		public string employee_name { get; set; }
-		public string email { get; set; }
-		public string phoneno { get; set; }
+		public string? email { get; set; }
+		public string? phoneno { get; set; }
 	}
 }
